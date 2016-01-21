@@ -1,0 +1,4 @@
+--verbose
+--ignore-errors
+--playlist-reverse
+--sleep-interval 3

@@ -1,31 +1,23 @@
 #!/bin/bash
 
+
+## DEBUG echo.
+function echoDbg {
+    [[ "$DBG" == "1" ]] && echo "$(basename $(readlink -f $0)) DEBUG:: $1";
+}
+
 function yt-dl_init_config {
+    if [[ ! -e "${HOME}/.config/youtube-dl/config" ]]; then
+        # Directory where this script is stored.
+        local SCRIPT_DIR="$(dirname $(readlink -f $0))"
 
-if [[ ! -e "${HOME}/.config/youtube-dl/config" ]]; then
-    mkdir -p ${HOME}/.config/youtube-dl
-    echo "--verbose
---ignore-errors
---playlist-reverse
---sleep-interval 3
---netrc" > ${HOME}/.config/youtube-dl/config
-   echo "Created file: ${HOME}/.config/youtube-dl/config"
-else
-   echo "File: ${HOME}/.config/youtube-dl/config already exist."
-fi
+        mkdir -p ${HOME}/.config/youtube-dl
+        ln -s "${SCRIPT_DIR}/youtube-dl-config" "${HOME}/.config/youtube-dl/config"
 
-if [[ ! -e "${HOME}/.netrc" ]]; then
-   touch $HOME/.netrc
-   chmod a-rwx,u+rw $HOME/.netrc
-
-   #echo "machine nicovideo login myaccount@gmail.com password insert_password_here" >> $HOME/.netrc
-
-   echo "Created file: ${HOME}/.netrc"
-else
-   echo "File: ${HOME}/.netrc already exist"
-fi
-
-
+        echoDbg "Created file: ${HOME}/.config/youtube-dl/config"
+    else
+        echoDbg "File: ${HOME}/.config/youtube-dl/config already exist."
+    fi
 }
 
 
@@ -114,5 +106,5 @@ function do-stuff {
     fi
 }
 yt-dl_init_config
-rapid-blaster-nico
+#rapid-blaster-nico
 

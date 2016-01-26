@@ -6,6 +6,8 @@ function echoDbg {
     [[ "$DBG" == "1" ]] && echo "$(basename $(readlink -f $0)) DEBUG:: $1";
 }
 
+
+
 function yt-dl_init_config {
     if [[ ! -e "${HOME}/.config/youtube-dl/config" ]]; then
         # Directory where this script is stored.
@@ -21,89 +23,40 @@ function yt-dl_init_config {
 }
 
 
-function rapid-blaster-nico {
-    pushd ~/shared_repos/rapid_blaster > /dev/null
 
+function rapid-blaster-nico {
+    local DIR="${HOME}/shared_repos/rapid_blaster"
     local URL="http://www.nicovideo.jp/mylist/52638165"
 
-#    URL="${URL}" PARAMS="--playlist-start 1 --playlist-end 29" do-stuff
-#    sleep 3
-#    URL="${URL}" PARAMS="--playlist-start 30 --playlist-end last" do-stuff
+    do-stuff "${DIR}" "${URL}" "--playlist-start 1  --playlist-end 29"
 
-URL="${URL}" do-stuff
+    do-stuff "${DIR}" "${URL}" "--playlist-start 30 --playlist-end last"
 
-	
-	popd > /dev/null
+    #do-stuff "${DIR}" "${URL}"
 }
 
 ###
 # URL - url to download
 # PARAMS - params to the downloader
 ###
-###
-# DEBUG=true - keep log files and detect duplicated files
-# DEBUG2=true - will create dummy files instead of doing the real thing
-###
 
 function do-stuff {
-    local mPREV=prev.txt
-    local mCURR=curr.txt
-    local mMD5SUM=md5.txt
-    local mREPEATED=duplicates.txt
+    local DIR="$1"
+    local URL="$2"
+    local PARAMS="$3"
 
-    local mLOGFILES="${mPREV}|${mCURR}|${mMD5SUM}|${mREPEATED}"
+    [[ ! -d "${DIR}" ]] && mkdir -p "${DIR}"
 
+    pushd "${DIR}" > /dev/null
 
-    # previous file list
-    ls -1 | sort | grep -vE "${mLOGFILES}" > prev.txt
-
-
-    # do the stuff
-    if [[ "${DEBUG2}" == "true" ]]; then
-        local STRING=$(date +%Y%m%d_%H:%M:%S)
-        echo "${STRING}" > "${STRING}.test.txt"
+    if [[ ! -z "${PARAMS}" ]]; then
+        echo youtube-dl "${PARAMS}" "${URL}"
     else
-        echo "Starting..."
-        youtube-dl "${PARAMS}" "${URL}"
+        echo youtube-dl "${URL}"
     fi
 
-    # current file list
-    ls -1 | sort | grep -vE "${mLOGFILES}" > curr.txt
+    popd > /dev/null
 
-    # check for duplicates
-    if [[ "${DEBUG}" == "true" ]]; then
-        # get the files md5sum
-        rm -f "${mMD5SUM}"
-        ls -1 | sort | grep -vE "${mLOGFILES}" | while read line; do
-            md5sum "${line}" >> "${mMD5SUM}";
-        done
-
-       # list repeated files
-       rm -f "{$mREPEATED}"
-       cat "${mMD5SUM}" | cut -d ' ' -f 1 | sort | uniq -d | while read line; do
-           grep "${line}" "${mMD5SUM}" >> "${mREPEATED}";
-       done
-    fi
-
-    # check differences between the file lists...
-    local mDIFF=$(diff prev.txt curr.txt | grep -E "^>|^<" | sed "s/^>/+/g" | sed "s/^</-/g")
-
-    # then present the differences, if they exist
-    if [[ -z "${mDIFF}" ]]; then
-        echo "No new files detected."
-        echo ""
-    else
-        echo "Differences in files found:"
-        echo "${mDIFF}"
-        echo ""
-    fi
-
-    # finally, clear the lists
-    if [[ "${DEBUG}" == "true" ]]; then
-        echo "All done. Check log files."
-    else
-        rm -f "${mPREV}" "${mCURR}" "${mMD5SUM}" "${mREPEATED}"
-    fi
 }
 yt-dl_init_config
 #rapid-blaster-nico

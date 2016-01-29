@@ -25,6 +25,18 @@ function yt-dl_init_config {
 
 
 function temp-rapid {
+    # move lowquality videos away
+    mkdir lowquality
+    echo "スプラトゥーンＳ＋ガチマッチ01【ラピッドブラスター】-sm27085285.mp4
+スプラトゥーンＳ＋ガチマッチ24【ラピッドブラスター】-sm27285174.mp4
+スプラトゥーンＳ＋ガチマッチ43【ラピッドブラスター】-sm27679526.mp4
+スプラトゥーンＳ＋ガチマッチ44【ラピッドブラスター】-sm27724612.mp4
+スプラトゥーンＳ＋ガチマッチ45【ラピッドブラスター】-sm27767281.mp4
+スプラトゥーンＳ＋タッグマッチ02【ラピッドブラスター】-sm27701123.mp4
+スプラトゥーンＳ＋タッグマッチ03【ラピッドブラスター】-sm27722224.mp4" | while read line; do
+        mv "$line" lowquality/
+    done
+
     # redownload lowquality videos. new files must be 100MB.
     local NICOPREF="http://www.nicovideo.jp"
     echo "sm27085285
@@ -62,7 +74,7 @@ done
 スプラトゥーンＳ＋ガチマッチ27【ラピッドブラスター】-sm27324694.mp4" | while read line; do
         mv "$line" duplicated/
     done
-    echo "Maintenace for rapidvideos"
+    echo "Maintenace for rapidvideos. Check lowquality and duplicated video dirs."
 }
 
 

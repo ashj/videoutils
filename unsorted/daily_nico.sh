@@ -27,11 +27,10 @@ function rapid-blaster-nico {
     local DIR="${HOME}/shared_repos/rapid_blaster"
     local URL="http://www.nicovideo.jp/mylist/52638165"
 
-    do-stuff "${DIR}" "${URL}" "--playlist-start 1  --playlist-end 29"
+    do-stuff "${DIR}" "${URL}" "--playlist-start 61"
 
-    sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 30 --playlist-end 60"
-
-    sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 61"
+    #sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 30 --playlist-end 60"
+    #sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 1  --playlist-end 29"
 }
 
 ###

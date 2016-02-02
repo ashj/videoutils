@@ -22,6 +22,12 @@ DEFAULT_VOLUME_GAIN="1.0"
 ###############################
 
 
+# CUSTOM (via env. variables)
+[[ ! -z "$ALBUM" ]] && TAG_ALBUM=$ALBUM
+[[ ! -z "$ARTIST" ]] && TAG_ARTIST=$ARTIST
+[[ ! -z "$GENRE" ]] && TAG_GENRE=$GENRE
+
+
 
 IFS=$'\n'
 OUTPUT_DIR=audio_only

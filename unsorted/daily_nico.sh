@@ -26,11 +26,12 @@ function yt-dl_init_config {
 function rapid-blaster-nico {
     local DIR="${HOME}/shared_repos/rapid_blaster"
     local URL="http://www.nicovideo.jp/mylist/52638165"
+    local AVOID_LQ="--min-filesize 50.0m"
 
-    do-stuff "${DIR}" "${URL}" "--playlist-start 61"
+    do-stuff "${DIR}" "${URL}" "--playlist-start 61 ${AVOID_LQ}"
 
-    #sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 30 --playlist-end 60"
-    #sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 1  --playlist-end 29"
+    #sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 30 --playlist-end 60 ${AVOID_LQ}"
+    #sleep 20; do-stuff "${DIR}" "${URL}" "--playlist-start 1  --playlist-end 29 ${AVOID_LQ}"
 }
 
 ###

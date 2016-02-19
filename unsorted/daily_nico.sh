@@ -60,3 +60,38 @@ function do-stuff {
 yt-dl_init_config
 #rapid-blaster-nico
 
+
+function do-get-list {
+    local LIST=$LIST
+    local DST_DIR="$DST"
+
+    if [[ -z "$LIST" ]]; then
+        echo "ERROR: export LIST=something"
+        return
+    fi
+
+    if [[ -z "$DST_DIR" ]]; then
+        echoDbg "No DST in env. Will put in current directory."
+        DST_DIR="."
+    fi
+
+    cd "$DST_DIR"
+
+    local NUMLINES=$(echo "${LIST}" | wc -l)
+    local i=1
+
+    echo "${LIST}" | while read line; do
+        echoDbg "line before cleanup: \"$line\""
+        line=$(echo "$line" | sed "s/&.*$//")
+        echoDbg "line after cleanup : \"$line\""
+
+        echo "Processing $i of $NUMLINES: $line"
+        youtube-dl "$line"
+
+        echo ""
+        (( i += 1 ))
+    done
+
+    echo $URL
+}
+

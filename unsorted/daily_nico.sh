@@ -69,7 +69,7 @@ function do-get-list {
         echo "ERROR: export LIST=something"
         return
     fi
-    LIST=$(echo "$LIST" | sort | uniq)
+    LIST=$(echo "$LIST" | sed "/^[\s]*$/d" | sed "/^#/d" | sort | uniq)
 
     if [[ -z "$DST_DIR" ]]; then
         echoDbg "No DST in env. Will put in current directory."
@@ -82,10 +82,6 @@ function do-get-list {
     local i=1
 
     echo "${LIST}" | while read line; do
-        if [[ -z "$line" ]]; then
-            (( NUMLINES -= 1 ))
-            continue;
-        fi
 
         echoDbg "line before cleanup: \"$line\""
         line=$(echo "$line" | sed "s/&.*$//")
